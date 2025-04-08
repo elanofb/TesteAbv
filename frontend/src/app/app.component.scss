@@ -1,0 +1,38 @@
+.app-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.navbar {
+  background: #333;
+  padding: 1rem;
+  
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 1rem;
+  }
+
+  a {
+    color: white;
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+
+    &:hover {
+      background: #444;
+    }
+
+    &.active {
+      background: #555;
+    }
+  }
+}
+
+.content {
+  flex: 1;
+  padding: 2rem;
+}

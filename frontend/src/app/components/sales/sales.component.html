@@ -1,0 +1,59 @@
+<div class="sales-container">
+  <h2>Venda</h2>
+
+  <form [formGroup]="saleForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <input type="text" formControlName="saleNumber" placeholder="Sale Number">
+    </div>
+    <div class="form-group">
+      <input type="text" formControlName="customer" placeholder="Customer">
+    </div>
+    <div class="form-group">
+      <input type="date" formControlName="saleDate">
+    </div>
+    <div class="form-group">
+      <input type="number" formControlName="productId" placeholder="Product ID">
+    </div>
+    <div class="form-group">
+      <input type="number" formControlName="quantity" placeholder="Quantity">
+    </div>
+    <div class="form-group">
+      <input type="number" formControlName="unitPrice" placeholder="Unit Price">
+    </div>
+    <div class="form-group">
+      <input type="number" formControlName="discount" placeholder="Discount (%)">
+    </div>
+    <div class="form-group">
+      <input type="text" formControlName="branch" placeholder="Branch">
+    </div>
+    <button type="submit" [disabled]="!saleForm.valid">{{ editMode ? 'Atualizar' : 'Vender' }}</button>
+    <button type="button" *ngIf="editMode" (click)="cancelEdit()">Cancel</button>
+  </form>
+
+  <table *ngIf="sales && sales.length > 0">
+    <thead>
+      <tr>
+        <th>Sale Number</th>
+        <th>Customer</th>
+        <th>Date</th>
+        <th>Total Amount</th>
+        <th>Branch</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let sale of sales">
+        <td>{{ sale?.saleNumber }}</td>
+        <td>{{ sale?.customer }}</td>
+        <td>{{ sale?.saleDate | date:'shortDate' }}</td>
+        <td>{{ sale?.totalAmount | currency }}</td>
+        <td>{{ sale?.branch }}</td>
+        <td>
+          <button (click)="editSale(sale)">Edit</button>
+          <button (click)="deleteSale(sale.id!)" *ngIf="sale.id">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <p *ngIf="!sales || sales.length === 0">No sales found.</p>
+</div>

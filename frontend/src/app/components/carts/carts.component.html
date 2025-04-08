@@ -1,0 +1,53 @@
+<div class="carts-container">
+  <h2>Cart Management</h2>
+
+  <form [formGroup]="cartForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="userId">User ID:</label>
+      <input id="userId" type="number" formControlName="userId">
+    </div>
+
+    <div class="form-group">
+      <label for="productId">Product ID:</label>
+      <input id="productId" type="number" formControlName="productId">
+    </div>
+
+    <div class="form-group">
+      <label for="quantity">Quantity:</label>
+      <input id="quantity" type="number" formControlName="quantity">
+    </div>
+
+    <button type="submit">Create Cart</button>
+  </form>
+
+  <table *ngIf="carts.length > 0">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>User ID</th>
+        <th>Date</th>
+        <th>Products</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let cart of carts">
+        <td>{{cart.id}}</td>
+        <td>{{cart.userId}}</td>
+        <td>{{cart.date | date:'shortDate'}}</td>
+        <td>
+          <ul>
+            <li *ngFor="let product of cart.products">
+              Product ID: {{product.productId}}, Quantity: {{product.quantity}}
+            </li>
+          </ul>
+        </td>
+        <td>
+          <button (click)="deleteCart(cart.id!)">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p *ngIf="carts.length === 0">No carts found.</p>
+</div>

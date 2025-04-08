@@ -1,0 +1,45 @@
+<div class="search-container">
+  <h2>Search Sales</h2>
+
+  <form [formGroup]="searchForm" (ngSubmit)="onSearch()">
+    <div class="form-group">
+      <label for="saleNumber">Sale Number:</label>
+      <input id="saleNumber" type="text" formControlName="saleNumber">
+    </div>
+    
+    <div class="form-group">
+      <label for="startDate">Start Date:</label>
+      <input id="startDate" type="date" formControlName="startDate">
+    </div>
+    
+    <div class="form-group">
+      <label for="endDate">End Date:</label>
+      <input id="endDate" type="date" formControlName="endDate">
+    </div>
+    
+    <button type="submit">Search</button>
+  </form>
+
+  <table *ngIf="sales.length > 0">
+    <thead>
+      <tr>
+        <th>Sale Number</th>
+        <th>Customer</th>
+        <th>Date</th>
+        <th>Total Amount</th>
+        <th>Branch</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let sale of sales">
+        <td>{{sale.saleNumber}}</td>
+        <td>{{sale.customer}}</td>
+        <td>{{sale.saleDate | date:'shortDate'}}</td>
+        <td>{{sale.totalAmount | currency}}</td>
+        <td>{{sale.branch}}</td>
+      </tr>
+    </tbody>
+  </table>
+  
+  <p *ngIf="sales.length === 0">No sales found.</p>
+</div>
