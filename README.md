@@ -1,7 +1,13 @@
-# TesteMouts
+# DeveloperStore
 
 ## Visão Geral
 Este repositório contém a implementação do backend do projeto DeveloperStore, utilizando .NET 8.0 e PostgreSQL. O projeto segue a arquitetura Clean Architecture e CQRS.
+
+## Video Exibição
+O funcionamento do "DeveloperStore" pode ser visualizado através do link: https://youtu.be/-sVqyYctvsA
+
+
+https://github.com/user-attachments/assets/fc9686a7-d20d-434c-a40e-8ae9fc3c3f62
 
 ## Tecnologias Utilizadas
 
@@ -374,6 +380,7 @@ Adicionar pacote de design:
 ```bash
 dotnet add package Microsoft.EntityFrameworkCore.Design
 ```
+--- 
 
 ### Criar e Atualizar Migrações
 Criar uma nova migração:
@@ -383,6 +390,81 @@ dotnet ef migrations add InitialCreate
 Atualizar o banco de dados:
 ```bash
 dotnet ef database update
+```
+
+---
+
+## Criar as tabelas através de script
+
+Para criar as tabelas diretamente no banco: 
+```bash
+-- TABELA: Audits
+CREATE TABLE IF NOT EXISTS "Audits" (
+    "Id" SERIAL PRIMARY KEY,
+    "TableName" TEXT NOT NULL,
+    "Operation" TEXT NOT NULL,
+    "Timestamp" TIMESTAMPTZ NOT NULL,
+    "PerformedBy" TEXT NOT NULL,
+    "Details" TEXT NOT NULL
+);
+
+-- TABELA: Logs
+CREATE TABLE IF NOT EXISTS "Logs" (
+    "Id" SERIAL PRIMARY KEY,
+    "Event" TEXT NOT NULL,
+    "Details" TEXT NOT NULL,
+    "Timestamp" TIMESTAMPTZ NOT NULL
+);
+
+-- TABELA: Products
+CREATE TABLE IF NOT EXISTS "Products" (
+    "Id" SERIAL PRIMARY KEY,
+    "Name" TEXT NOT NULL,
+    "Description" TEXT NOT NULL,
+    "UnitPrice" NUMERIC NOT NULL,
+    "IsAvailable" BOOLEAN NOT NULL
+);
+
+-- TABELA: Sales
+CREATE TABLE IF NOT EXISTS "Sales" (
+    "Id" SERIAL PRIMARY KEY,
+    "SaleNumber" TEXT NOT NULL,
+    "SaleDate" TIMESTAMPTZ NOT NULL,
+    "Customer" TEXT NOT NULL,
+    "TotalAmount" NUMERIC NOT NULL,
+    "Branch" TEXT NOT NULL
+);
+
+-- TABELA: Users
+CREATE TABLE IF NOT EXISTS "Users" (
+    "Id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    "Username" VARCHAR(50) NOT NULL,
+    "Email" VARCHAR(100) NOT NULL,
+    "Phone" VARCHAR(20) NOT NULL,
+    "Password" VARCHAR(100) NOT NULL,
+    "Role" VARCHAR(20) NOT NULL,
+    "Status" VARCHAR(20) NOT NULL,
+    "CreatedAt" TIMESTAMPTZ NOT NULL,
+    "UpdatedAt" TIMESTAMPTZ
+);
+
+-- TABELA: SaleItems
+CREATE TABLE IF NOT EXISTS "SaleItems" (
+    "Id" SERIAL PRIMARY KEY,
+    "ProductId" INTEGER NOT NULL,
+    "Quantity" INTEGER NOT NULL,
+    "UnitPrice" NUMERIC NOT NULL,
+    "Discount" NUMERIC NOT NULL,
+    "Total" NUMERIC NOT NULL,
+    "SaleId" INTEGER,
+
+    CONSTRAINT "FK_SaleItems_Sales_SaleId"
+        FOREIGN KEY ("SaleId") REFERENCES "Sales"("Id")
+);
+
+-- ÍNDICE da FK em SaleItems
+CREATE INDEX IF NOT EXISTS "IX_SaleItems_SaleId"
+    ON "SaleItems" ("SaleId");
 ```
 
 ---
