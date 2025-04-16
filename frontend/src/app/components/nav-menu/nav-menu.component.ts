@@ -7,29 +7,35 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [RouterModule, CommonModule],
   template: `
-    <nav class="navbar">
-      <a routerLink="/sales" routerLinkActive="active">Sales</a>
-      <a routerLink="/carts" routerLinkActive="active">Carts</a>
-      <a routerLink="/users" routerLinkActive="active">Users</a>
+    <nav>
+      <ul>
+        <li><a routerLink="/sales" routerLinkActive="active">Sales</a></li>
+        <!-- <li><a routerLink="/products" routerLinkActive="active">Products</a></li>
+        <li><a routerLink="/produtos" routerLinkActive="active">Produtos</a></li> -->
+        <li><a routerLink="/users" routerLinkActive="active">Produtos</a></li>
+      </ul>
     </nav>
   `,
   styles: [`
-    .navbar {
-      background: #333;
+    nav {
+      background-color: #333;
       padding: 1rem;
+    }
+    ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
       display: flex;
-      gap: 2rem;
+      gap: 1rem;
     }
     a {
       color: white;
       text-decoration: none;
       padding: 0.5rem 1rem;
     }
-    a:hover {
-      background: #444;
-    }
-    .active {
-      background: #555;
+    a:hover, a.active {
+      background-color: #555;
+      border-radius: 4px;
     }
   `]
 })

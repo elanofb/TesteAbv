@@ -1,7 +1,8 @@
 using AutoMapper;
-using Ambev.DeveloperEvaluation.Application.Sales.CreateSale;
+using Ambev.DeveloperEvaluation.Application.SaleItems.CreateSaleItem;
+using Ambev.DeveloperEvaluation.Domain.Entities;
 
-namespace Ambev.DeveloperEvaluation.WebApi.Features.SaleItems.CreateSale;
+namespace Ambev.DeveloperEvaluation.WebApi.Features.SaleItems.CreateSaleItems;
 
 /// <summary>
 /// Profile for mapping between Application and API CreateSale responses
@@ -13,7 +14,9 @@ public class CreateSaleItemProfile : Profile
     /// </summary>
     public CreateSaleItemProfile()
     {
-        CreateMap<CreateSaleItemRequest, CreateSaleCommand>();
-        CreateMap<CreateSaleResult, CreateSaleItemResponse>();
+        CreateMap<CreateSaleItemRequest, CreateSaleItemCommand>();
+        CreateMap<CreateSaleItemResult, CreateSaleItemResponse>();
+         
+        CreateMap<SaleItem, CreateSaleItemResult>();
     }
 }

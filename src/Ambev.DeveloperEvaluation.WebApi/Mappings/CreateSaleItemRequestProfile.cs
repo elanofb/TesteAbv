@@ -1,5 +1,5 @@
 ﻿using Ambev.DeveloperEvaluation.Application.SaleItems.CreateSaleItem;
-using Ambev.DeveloperEvaluation.WebApi.Features.SaleItems.CreateSale;
+using Ambev.DeveloperEvaluation.WebApi.Features.SaleItems.CreateSaleItems;
       
 using AutoMapper;
 

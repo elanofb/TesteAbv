@@ -49,13 +49,11 @@ public class SaleItemRepository : ISaleItemRepository
         return true;
     }
 
-    //public async Task<SaleItem?> GetByEmailAsync(string email, CancellationToken cancellationToken = default)
-    // public async Task<SaleItem> UpdateAsync(SaleItem saleitem, CancellationToken cancellationToken = default)    
-    // {
-    //     await _context.SaleItems.Update(saleitem);
-    //     //await _context.SaleItems.AddAsync(saleitem, cancellationToken);
-    //     await _context.SaveChangesAsync(cancellationToken);
-    //     return saleitem;
-    // }
-
+    public async Task<List<SaleItem>> GetBySaleIdWithProductAsync(int saleId)
+    {
+        return await _context.SaleItems
+            .Include(si => si.Product)
+            .Where(si => si.SaleId == saleId)
+            .ToListAsync();
+    }
 }

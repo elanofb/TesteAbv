@@ -26,8 +26,8 @@
     <div class="form-group">
       <input type="text" formControlName="branch" placeholder="Branch">
     </div>
-    <button type="submit" [disabled]="!saleForm.valid">{{ editMode ? 'Atualizar' : 'Vender' }}</button>
-    <button type="button" *ngIf="editMode" (click)="cancelEdit()">Cancel</button>
+    <button type="submit" [disabled]="!saleForm.valid">{{ editMode ? 'Atualizar' : 'Iniciar Venda' }}</button>
+    <button type="button" *ngIf="editMode" (click)="cancelEdit()">Cancelar</button>
   </form>
 
   <table *ngIf="sales && sales.length > 0">
@@ -43,14 +43,15 @@
     </thead>
     <tbody>
       <tr *ngFor="let sale of sales">
-        <td>{{ sale?.saleNumber }}</td>
+        <td><a [routerLink]="['/sales', sale.id]">{{ sale?.saleNumber }}</a></td>
         <td>{{ sale?.customer }}</td>
         <td>{{ sale?.saleDate | date:'shortDate' }}</td>
         <td>{{ sale?.totalAmount | currency }}</td>
         <td>{{ sale?.branch }}</td>
         <td>
-          <button (click)="editSale(sale)">Edit</button>
-          <button (click)="deleteSale(sale.id!)" *ngIf="sale.id">Delete</button>
+          <button class="view-items-btn" (click)="viewItems(sale)">Visualizar Itens</button>
+          <button (click)="editSale(sale)">Modificar Venda</button>
+          <button (click)="deleteSale(sale.id!)" *ngIf="sale.id">Cancelar Venda</button>
         </td>
       </tr>
     </tbody>

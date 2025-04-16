@@ -1,0 +1,40 @@
+<div class="container">
+  <h2>{{isEditMode ? 'Edit' : 'Create New'}} Product</h2>
+  <form [formGroup]="productForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label>Name:</label>
+      <input type="text" formControlName="name">
+      <div class="error" *ngIf="productForm.get('name')?.errors?.['required'] && productForm.get('name')?.touched">
+        Name is required
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Description:</label>
+      <textarea formControlName="description" rows="3"></textarea>
+    </div>
+
+    <div class="form-group">
+      <label>Unit Price:</label>
+      <input type="number" formControlName="unitPrice" step="0.01">
+      <div class="error" *ngIf="productForm.get('unitPrice')?.errors?.['required'] && productForm.get('unitPrice')?.touched">
+        Price is required
+      </div>
+      <div class="error" *ngIf="productForm.get('unitPrice')?.errors?.['min']">
+        Price must be greater than 0
+      </div>
+    </div>
+
+    <div class="form-group checkbox">
+      <label>
+        <input type="checkbox" formControlName="isAvailable">
+        Available
+      </label>
+    </div>
+
+    <div class="actions">
+      <button type="button" class="btn-cancel" (click)="goBack()">Cancel</button>
+      <button type="submit" class="btn-save" [disabled]="!productForm.valid">Save</button>
+    </div>
+  </form>
+</div>

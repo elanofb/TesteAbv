@@ -62,7 +62,7 @@ public class Program
  
             // Pegando a conexão do appsettings.json
             var rabbitMqConnection = builder.Configuration.GetConnectionString("RabbitMqConnection");
-            var queueName = "sales_queue_elano_ambev_mouts";
+            var queueName = "sales_queue_elano_ambev";
 
             // Configuração do Rebus usando o Common
             builder.Services.AddRebusConfiguration(rabbitMqConnection, queueName);            
@@ -100,7 +100,7 @@ public class Program
                 app.UseSwaggerUI();
             }
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
             app.UseCors("AllowAngularApp");
             app.UseAuthentication();
             app.UseAuthorization();

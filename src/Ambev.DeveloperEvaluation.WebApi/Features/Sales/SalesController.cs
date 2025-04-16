@@ -9,7 +9,9 @@ using Ambev.DeveloperEvaluation.Application.Sales.CreateSale;
 using Ambev.DeveloperEvaluation.Application.Sales.GetSale;
 using Ambev.DeveloperEvaluation.Application.Sales.DeleteSale;
 using Ambev.DeveloperEvaluation.Application.Sales.GetSales;
+using Ambev.DeveloperEvaluation.Application.SaleItems.GetSaleItemsBySaleId;
 using Ambev.DeveloperEvaluation.WebApi.Features.Sales.GetSales;
+using Ambev.DeveloperEvaluation.WebApi.Features.SaleItems.GetSaleItemsBySaleId;
 
 namespace Ambev.DeveloperEvaluation.WebApi.Features.Sales;
 
@@ -117,4 +119,21 @@ public class SalesController : BaseController
             Message = "Sale deleted successfully"
         });
     }
+
+    [HttpGet("{saleId}/items")]
+    [ProducesResponseType(typeof(ApiResponseWithData<List<GetSaleItemsBySaleIdResult>>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetSaleItemsBySaleId(int saleId, CancellationToken ct)
+    {
+        var request = new GetSaleItemsBySaleIdRequest { SaleId = saleId };
+        var command = _mapper.Map<GetSaleItemsBySaleIdCommand>(request);
+        var result = await _mediator.Send(command, ct);
+
+        return Ok(new ApiResponseWithData<List<GetSaleItemsBySaleIdResult>>
+        {
+            Success = true,
+            Message = "Sale items retrieved",
+            Data = result
+        });
+    }   
+
 }

@@ -32,6 +32,12 @@ public class ProductRepository : IProductRepository
         return await _context.Products.FirstOrDefaultAsync(o=> o.Id == id, cancellationToken);
     }
 
+    public async Task<List<Product?>> GetAllAsync(CancellationToken cancellationToken = default)
+    {
+        return await _context.Products.ToListAsync(cancellationToken);
+    }
+
+
     public async Task<bool> DeleteAsync(int id, CancellationToken cancellationToken = default)
     {
         var product = await GetByIdAsync(id, cancellationToken);
@@ -42,14 +48,5 @@ public class ProductRepository : IProductRepository
         await _context.SaveChangesAsync(cancellationToken);
         return true;
     }
-
-    //public async Task<Product?> GetByEmailAsync(string email, CancellationToken cancellationToken = default)
-    // public async Task<Product> UpdateAsync(Product product, CancellationToken cancellationToken = default)    
-    // {
-    //     await _context.Products.Update(product);
-    //     //await _context.Products.AddAsync(product, cancellationToken);
-    //     await _context.SaveChangesAsync(cancellationToken);
-    //     return product;
-    // }
 
 }

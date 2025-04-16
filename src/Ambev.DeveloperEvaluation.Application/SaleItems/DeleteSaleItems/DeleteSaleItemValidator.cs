@@ -13,7 +13,10 @@ public class DeleteSaleItemValidator : AbstractValidator<DeleteSaleItemCommand>
     public DeleteSaleItemValidator()
     {
         RuleFor(x => x.Id)
-            .NotEmpty()
-            .WithMessage("SaleItem ID is required");
+            .GreaterThan(0)
+            .WithMessage("Id must be greater than zero.");
+        //RuleFor(x => x.Id)
+        //    .NotEmpty()
+        //    .WithMessage("SaleItem ID is required");
     }
 }

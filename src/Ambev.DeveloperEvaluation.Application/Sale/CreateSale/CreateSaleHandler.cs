@@ -59,6 +59,9 @@ public class CreateSaleHandler : IRequestHandler<CreateSaleCommand, CreateSaleRe
         // Aplicar desconto antes de salvar a venda
         _discountService.ApplyDiscounts(sale.Items);
 
+        sale.SaleDate = DateTime.SpecifyKind(sale.SaleDate, DateTimeKind.Utc);
+
+
         var createdSale = await _saleRepository.CreateAsync(sale, cancellationToken);
 
         // Publicando evento no Rebus após salvar a venda.

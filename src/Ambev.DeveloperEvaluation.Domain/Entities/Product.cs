@@ -7,5 +7,6 @@ namespace Ambev.DeveloperEvaluation.Domain.Entities
         public string Description { get; set; } = string.Empty;
         public decimal UnitPrice { get; set; }
         public bool IsAvailable { get; set; }
+        public ICollection<SaleItem> SaleItems { get; set; }
     }
 }

@@ -9,5 +9,7 @@ namespace Ambev.DeveloperEvaluation.Domain.Entities
         public decimal UnitPrice { get; set; }
         public decimal Discount { get; set; }
         public decimal Total { get; set; }
+        public Product Product { get; set; }
+        public Sale Sale { get; set; }
     }
 }

@@ -3,13 +3,21 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { CommonModule } from '@angular/common';
 import { SalesService } from '../../services/sales.service';
 import { Sale } from '../../models/sale.model';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { SaleItemsDialogComponent } from './sale-items-dialog.component';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-sales',
   templateUrl: './sales.component.html',
   styleUrls: ['./sales.component.scss'],
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule]
+  imports: [
+    CommonModule, 
+    ReactiveFormsModule,
+    MatDialogModule,
+    RouterModule
+  ]
 })
 export class SalesComponent implements OnInit {
   sales: Sale[] = [];
@@ -19,14 +27,15 @@ export class SalesComponent implements OnInit {
 
   constructor(
     private salesService: SalesService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private dialog: MatDialog
   ) {
     this.saleForm = this.fb.group({
       saleNumber: ['', Validators.required],
       customer: ['', Validators.required],
-      saleDate: [new Date().toISOString().split('T')[0], Validators.required],
-      productId: [0, [Validators.required, Validators.min(0)]],
-      quantity: [1, [Validators.required, Validators.min(1)]], // Mínimo de 1
+      saleDate: ['', Validators.required],
+      productId: ['', Validators.required],
+      quantity: [1, [Validators.required, Validators.min(1)]],
       unitPrice: [0, [Validators.required, Validators.min(0)]],
       discount: [0, [Validators.min(0), Validators.max(100)]], // Opcional, entre 0 e 100
       branch: ['', Validators.required]
@@ -53,7 +62,7 @@ export class SalesComponent implements OnInit {
     });
   }
 
-  onSubmit(): void {
+  onSubmit() {
     if (this.saleForm.valid) {
       const formValue = this.saleForm.value;
       
@@ -62,33 +71,31 @@ export class SalesComponent implements OnInit {
       const finalItemTotal = itemTotal - discountAmount;
   
       const saleData = {
+        id: 0,
         saleNumber: formValue.saleNumber,
         saleDate: new Date(formValue.saleDate).toISOString(),
         customer: formValue.customer,
         totalAmount: finalItemTotal,
         branch: formValue.branch,
-        items: [
-          {
-            productId: Number(formValue.productId),
-            quantity: Number(formValue.quantity),
-            unitPrice: Number(formValue.unitPrice),
-            discount: Number(formValue.discount || 0),
-            total: finalItemTotal
-          }
-        ]
+        items: [{
+          productId: formValue.productId,
+          quantity: formValue.quantity,
+          unitPrice: formValue.unitPrice,
+          discount: formValue.discount || 0,
+          total: finalItemTotal
+        }]
       };
   
-      console.log('Sending sale data:', saleData);
+      console.log('Submitting sale:', saleData);
   
       this.salesService.createSale(saleData).subscribe({
         next: (response) => {
           console.log('Sale created successfully:', response);
           this.loadSales();
-          this.resetForm();
+          this.saleForm.reset();
         },
         error: (error) => {
           console.error('Error creating sale:', error);
-          alert(`Error creating sale: ${error.error?.message || 'Unknown error'}`);
         }
       });
     }
@@ -123,5 +130,20 @@ export class SalesComponent implements OnInit {
     this.saleForm.reset();
     this.editMode = false;
     this.currentSaleId = null;
+  }
+
+  viewItems(sale: any) {
+    this.salesService.getSaleItems(sale.id).subscribe({
+      next: (items) => {
+        console.log('Sale Items:', items);
+        this.dialog.open(SaleItemsDialogComponent, {
+          width: '600px',
+          data: items
+        });
+      },
+      error: (error) => {
+        console.error('Error fetching sale items:', error);
+      }
+    });
   }
 }

@@ -7,7 +7,11 @@ using Ambev.DeveloperEvaluation.WebApi.Features.Products.GetProduct;
 using Ambev.DeveloperEvaluation.WebApi.Features.Products.DeleteProduct;
 using Ambev.DeveloperEvaluation.Application.Products.CreateProduct;
 using Ambev.DeveloperEvaluation.Application.Products.GetProduct;
+using Ambev.DeveloperEvaluation.Application.Products.GetProducts;
 using Ambev.DeveloperEvaluation.Application.Products.DeleteProduct;
+using Ambev.DeveloperEvaluation.Application.Sales.GetSales;
+using Ambev.DeveloperEvaluation.WebApi.Features.Sales.GetSales;
+using Ambev.DeveloperEvaluation.WebApi.Features.Products.GetProducts;
 
 namespace Ambev.DeveloperEvaluation.WebApi.Features.Products;
 
@@ -69,6 +73,35 @@ public class ProductsController : BaseController
             Data = _mapper.Map<GetProductResponse>(response)
         });
     }
+
+    [HttpGet]
+    //[ProducesResponseType(typeof(ApiResponseWithData<List<GetProductsResult>>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponseWithData<GetProductsResult>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> Get(CancellationToken ct)
+    {
+        var result = await _mediator.Send(new GetProductsCommand(), ct);
+        return Ok(new ApiResponseWithData<GetProductsResult>
+        {
+            Success = true,
+            Message = "Products retrieved",
+            Data = result
+        });
+    }
+
+    //[HttpGet]
+    ////[ProducesResponseType(typeof(ApiResponseWithData<List<GetProductsResponse>>), StatusCodes.Status200OK)]
+    //public async Task<IActionResult> Get1(CancellationToken cancellationToken)
+    //{
+    //    var command = _mapper.Map<GetProductsCommand>(request);
+    //    var response = await _mediator.Send(command, cancellationToken);
+
+    //    return Ok(new ApiResponseWithData<GetProductResponse>
+    //    {
+    //        Success = true,
+    //        Message = "Products retrieved successfully",
+    //        Data = _mapper.Map<GetProductsResponse>(response)
+    //    });
+    //}
 
     [HttpDelete("{id}")]
     [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status200OK)]

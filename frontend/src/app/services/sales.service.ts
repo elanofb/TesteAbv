@@ -7,7 +7,8 @@ import { Sale } from '../models/sale.model';
   providedIn: 'root'
 })
 export class SalesService {
-  private apiUrl = 'https://localhost:7181/api/sales';
+  private apiUrl = 'https://localhost:7181/api/Sales';
+  private apiUrlApi = 'https://localhost:7181/api';
 
   constructor(private http: HttpClient) {}
 
@@ -34,8 +35,8 @@ export class SalesService {
   }
 
   createSale(sale: Sale): Observable<Sale> {
-    // Remove os IDs do payload para deixar o backend gerar
     const payload = {
+      id: 0,
       saleNumber: sale.saleNumber,
       saleDate: sale.saleDate,
       customer: sale.customer,
@@ -45,13 +46,17 @@ export class SalesService {
         productId: item.productId,
         quantity: item.quantity,
         unitPrice: item.unitPrice,
-        discount: item.discount,
+        discount: item.discount || 0,
         total: item.total
       }))
     };
 
     return this.http.post<any>(this.apiUrl, payload).pipe(
-      map(response => response.data)
+      map(response => response.data),
+      catchError(error => {
+        console.error('Error in createSale:', error);
+        throw error;
+      })
     );
   }
 
@@ -63,6 +68,21 @@ export class SalesService {
 
   deleteSale(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  }
+
+  deleteSaleItem(itemId: number): Observable<void> {
+    return this.http.delete<any>(`${this.apiUrlApi}/SaleItem/${itemId}`).pipe(
+      map(response => {
+        console.log('Delete Response:', response);
+        if (!response.success) {
+          throw new Error(response.message);
+        }
+      }),
+      catchError(error => {
+        console.error('Error deleting sale item:', error);
+        throw error;
+      })
+    );
   }
 
   searchSales(saleNumber?: string, startDate?: string, endDate?: string): Observable<Sale[]> {
@@ -79,6 +99,68 @@ export class SalesService {
       catchError(error => {
         console.error('Error searching sales:', error);
         return [];
+      })
+    );
+  }
+
+  getSaleItems(saleId: number) {
+    interface ItemsResponse {
+      data: {
+        data: Array<{
+          id: number;
+          saleId: number;
+          productId: number;
+          product: {
+            id: number;
+            name: string;
+          };
+          quantity: number;
+          unitPrice: number;
+          total: number;
+        }>;
+        success: boolean;
+        message: string;
+        errors: any[];
+      };
+      success: boolean;
+      message: string;
+      errors: any[];
+    }
+
+    return this.http.get<ItemsResponse>(`${this.apiUrl}/${saleId}/items`).pipe(
+      map(response => {
+        console.log('Items Response:', response);
+        return response?.data?.data || [];
+      }),
+      catchError(error => {
+        console.error('Error fetching sale items:', error);
+        throw error;
+      })
+    );
+  }
+
+  addSaleItem(item: any): Observable<any> {
+    return this.http.post<any>(`${this.apiUrlApi}/SaleItem`, item).pipe(
+      map(response => {
+        console.log('Add Item Response:', response);
+        return response;
+      }),
+      catchError(error => {
+        console.error('Error adding sale item:', error);
+        throw error;
+      })
+    );
+  }
+
+  getProducts(): Observable<any[]> {
+    return this.http.get<any>(`${this.apiUrlApi}/Product`).pipe(
+      map(response => {
+        console.log('Products Response:', response);
+        return response?.data?.data || [];
+      }),
+      catchError(error => {
+        console.error('Error fetching products:', error);
+        throw error;
       })
     );
   }

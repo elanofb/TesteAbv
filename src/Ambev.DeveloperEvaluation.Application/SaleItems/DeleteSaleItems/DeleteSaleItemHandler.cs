@@ -1,6 +1,8 @@
 using MediatR;
 using FluentValidation;
 using Ambev.DeveloperEvaluation.Domain.Repositories;
+using Ambev.DeveloperEvaluation.Domain.Events;
+using Ambev.DeveloperEvaluation.Domain.Services;
 
 namespace Ambev.DeveloperEvaluation.Application.SaleItems.DeleteSaleItem;
 
@@ -10,6 +12,7 @@ namespace Ambev.DeveloperEvaluation.Application.SaleItems.DeleteSaleItem;
 public class DeleteSaleItemHandler : IRequestHandler<DeleteSaleItemCommand, DeleteSaleItemResponse>
 {
     private readonly ISaleItemRepository _saleitemRepository;
+    private readonly IMessageBusService _messageBusService;
 
     /// <summary>
     /// Initializes a new instance of DeleteSaleItemHandler
@@ -17,9 +20,10 @@ public class DeleteSaleItemHandler : IRequestHandler<DeleteSaleItemCommand, Dele
     /// <param name="saleitemRepository">The saleitem repository</param>
     /// <param name="validator">The validator for DeleteSaleItemCommand</param>
     public DeleteSaleItemHandler(
-        ISaleItemRepository saleitemRepository)
+        ISaleItemRepository saleitemRepository, IMessageBusService messageBusService)
     {
         _saleitemRepository = saleitemRepository;
+        _messageBusService = messageBusService;
     }
 
     /// <summary>
@@ -39,6 +43,9 @@ public class DeleteSaleItemHandler : IRequestHandler<DeleteSaleItemCommand, Dele
         var success = await _saleitemRepository.DeleteAsync(request.Id, cancellationToken);
         if (!success)
             throw new KeyNotFoundException($"SaleItem with ID {request.Id} not found");
+
+        // Publicando evento no Rebus após cancelar item da venda.
+        await _messageBusService.PublishEvent(new ItemCanceledEvent(request.Id.ToString()));
 
         return new DeleteSaleItemResponse { Success = true };
     }

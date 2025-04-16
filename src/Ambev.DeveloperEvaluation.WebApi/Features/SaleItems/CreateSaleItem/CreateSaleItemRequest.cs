@@ -1,18 +1,16 @@
 ﻿using Ambev.DeveloperEvaluation.Domain.Enums;
 using Ambev.DeveloperEvaluation.Domain.Entities;
 
-namespace Ambev.DeveloperEvaluation.WebApi.Features.SaleItems.CreateSale;
+namespace Ambev.DeveloperEvaluation.WebApi.Features.SaleItems.CreateSaleItems;
 
 /// <summary>
 /// Represents a request to create a new sale in the system.
 /// </summary>
 public class CreateSaleItemRequest
 {     
-        public int Id { get; set; }
-        public string SaleNumber { get; set; }
-        public DateTime SaleDate { get; set; }
-        public string Customer { get; set; }
-        public decimal TotalAmount { get; set; }
-        public string Branch { get; set; }
-        public List<SaleItem> Items { get; set; } = new();
+        public int SaleId { get; set; }
+        public int ProductId { get; set; }
+        public int Quantity { get; set; }
+        public decimal UnitPrice { get; set; }
+        public decimal Discount { get; set; }
 }

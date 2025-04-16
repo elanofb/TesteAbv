@@ -12,6 +12,7 @@ namespace Ambev.DeveloperEvaluation.Application.SaleItems.CreateSaleItem;
 /// </summary>
 public class CreateSaleItemHandler : IRequestHandler<CreateSaleItemCommand, CreateSaleItemResult>
 {
+    private readonly ISaleRepository _saleRepository;
     private readonly ISaleItemRepository _saleitemRepository;
     private readonly IMapper _mapper;
     private readonly IPasswordHasher _passwordHasher;
@@ -22,9 +23,10 @@ public class CreateSaleItemHandler : IRequestHandler<CreateSaleItemCommand, Crea
     /// <param name="saleitemRepository">The saleitem repository</param>
     /// <param name="mapper">The AutoMapper instance</param>
     /// <param name="validator">The validator for CreateSaleItemCommand</param>
-    public CreateSaleItemHandler(ISaleItemRepository saleitemRepository, IMapper mapper)
+    public CreateSaleItemHandler(ISaleItemRepository saleitemRepository, ISaleRepository saleRepository, IMapper mapper)
     {
         _saleitemRepository = saleitemRepository;
+        _saleRepository = saleRepository;
         _mapper = mapper;
     }
 
@@ -42,9 +44,13 @@ public class CreateSaleItemHandler : IRequestHandler<CreateSaleItemCommand, Crea
         if (!validationResult.IsValid)
             throw new ValidationException(validationResult.Errors);
 
-        var existingSaleItem = await _saleitemRepository.GetByIdAsync(command.Id, cancellationToken);
-        if (existingSaleItem != null)
-            throw new InvalidOperationException($"SaleItem with ID {command.Id} already exists");
+        var existingSale = await _saleRepository.GetByIdAsync(command.SaleId, cancellationToken);
+        if (existingSale == null)
+            throw new InvalidOperationException($"Sale with ID {command.SaleId} doesn't exists");
+
+        //var existingSaleItem = await _saleitemRepository.GetByIdAsync(command.SaleId, cancellationToken);
+        //if (existingSaleItem != null)
+        //    throw new InvalidOperationException($"SaleItem with ID {command.SaleId} already exists");
 
         var saleitem = _mapper.Map<SaleItem>(command);
         //saleitem.Password = _passwordHasher.HashPassword(command.Password);
