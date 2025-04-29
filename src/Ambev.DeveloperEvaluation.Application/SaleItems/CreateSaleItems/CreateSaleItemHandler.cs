@@ -48,12 +48,7 @@ public class CreateSaleItemHandler : IRequestHandler<CreateSaleItemCommand, Crea
         if (existingSale == null)
             throw new InvalidOperationException($"Sale with ID {command.SaleId} doesn't exists");
 
-        //var existingSaleItem = await _saleitemRepository.GetByIdAsync(command.SaleId, cancellationToken);
-        //if (existingSaleItem != null)
-        //    throw new InvalidOperationException($"SaleItem with ID {command.SaleId} already exists");
-
         var saleitem = _mapper.Map<SaleItem>(command);
-        //saleitem.Password = _passwordHasher.HashPassword(command.Password);
 
         var createdSaleItem = await _saleitemRepository.CreateAsync(saleitem, cancellationToken);
         var result = _mapper.Map<CreateSaleItemResult>(createdSaleItem);

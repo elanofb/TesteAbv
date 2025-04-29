@@ -1,18 +1,6 @@
-// using MediatR;
-// using Ambev.DeveloperEvaluation.Domain.Entities;
-// using Ambev.DeveloperEvaluation.Application.Products.CreateProduct;
-// using Ambev.DeveloperEvaluation.Application.Products.Commands;
 
-// namespace Ambev.DeveloperEvaluation.Application.Products.Commands
-// {
-//     public record CreateProductCommand(string Name, string Description, decimal UnitPrice, bool IsAvailable) : IRequest<ProductResult>;
-//     //public record CreateProductCommand(Product Product) : IRequest<CreateProductResult>;
-// }
 using MediatR;
-using Ambev.DeveloperEvaluation.Domain.Entities;
-using Ambev.DeveloperEvaluation.Application.Products.CreateProduct;
 using Ambev.DeveloperEvaluation.Common.Validation;
-using Ambev.DeveloperEvaluation.Domain.Enums;
 
 namespace Ambev.DeveloperEvaluation.Application.Products.CreateProduct;
 

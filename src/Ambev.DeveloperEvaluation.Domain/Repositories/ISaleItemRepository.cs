@@ -13,4 +13,5 @@ public interface ISaleItemRepository
     Task<List<SaleItem?>> GetBySaleIdAsync(int saleid, CancellationToken cancellationToken = default);
     Task<List<SaleItem>> GetBySaleIdWithProductAsync(int saleId);
     Task<bool> DeleteAsync(int id, CancellationToken cancellationToken = default);
+    Task<int> GetLastIdAsync(CancellationToken cancellationToken);
 }

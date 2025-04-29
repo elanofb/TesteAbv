@@ -9,6 +9,7 @@ using Ambev.DeveloperEvaluation.Domain.Events;
 using System.Threading;
 using System.Threading.Tasks;
 using Ambev.DeveloperEvaluation.Domain.Services;
+using Microsoft.Extensions.Logging;
 
 namespace Ambev.DeveloperEvaluation.Application.Sales.CreateSale;
 
@@ -19,56 +20,71 @@ public class CreateSaleHandler : IRequestHandler<CreateSaleCommand, CreateSaleRe
     private readonly ISaleItemRepository _saleItemRepository;
     private readonly IMessageBusService _messageBusService;
     private readonly SaleDiscountService _discountService;
+    private readonly ILogger<CreateSaleHandler> _logger;
 
     public CreateSaleHandler(ISaleRepository saleRepository,
                                 IMapper mapper,
                                 ISaleItemRepository saleItemRepository,
                                 IMessageBusService messageBusService,
-                                SaleDiscountService discountService)
+                                SaleDiscountService discountService,
+                                ILogger<CreateSaleHandler> logger)
     {
         _saleRepository = saleRepository;
         _mapper = mapper;
         _saleItemRepository = saleItemRepository;
         _messageBusService = messageBusService;
         _discountService = discountService;
+        _logger = logger;
     }
 
     public async Task<CreateSaleResult> Handle(CreateSaleCommand command, CancellationToken cancellationToken)
     {
-        var validator = new CreateSaleCommandValidator();
-        var validationResult = await validator.ValidateAsync(command, cancellationToken);
+        try
+        {
+            _logger.LogInformation("Starting sale creation for command {@Command}", command);
 
-        if (!validationResult.IsValid)
-            throw new ValidationException(validationResult.Errors);
+            var validator = new CreateSaleCommandValidator();
+            var validationResult = await validator.ValidateAsync(command, cancellationToken);
 
-        var existingSale = await _saleRepository.GetByIdAsync(command.Id, cancellationToken);
-        if (existingSale != null)
-            throw new InvalidOperationException($"Sale with ID {command.Id} already exists");
+            if (!validationResult.IsValid){
+                _logger.LogWarning("Validation failed for sale command: {@ValidationErrors}", validationResult.Errors);
+                throw new ValidationException(validationResult.Errors);
+            }
 
-        // Busca o último ID de venda 
-        var sales = await _saleRepository.GetAllAsync(cancellationToken);
-        var lastSale = sales
-            .OrderByDescending(s => s.Id)
-            .FirstOrDefault();
-        var nextSaleId = (lastSale?.Id ?? 0) + 1;
-        var nextItemId = 1;                  
+            var existingSale = await _saleRepository.GetByIdAsync(command.Id, cancellationToken);
+            if (existingSale != null){
+                _logger.LogWarning("Attempted to create duplicate sale with ID {SaleId}", command.Id);
+                throw new InvalidOperationException($"Sale with ID {command.Id} already exists");
+            }
 
-        var sale = _mapper.Map<Sale>(command);
-        sale.Id = nextSaleId;
+            // Busca o último ID de venda 
+            var lastSale = await _saleRepository.GetLastIdAsync(cancellationToken);            
+            var nextSaleId = lastSale + 1;
 
-        // Aplicar desconto antes de salvar a venda
-        _discountService.ApplyDiscounts(sale.Items);
+            var sale = _mapper.Map<Sale>(command);
+            sale.Id = nextSaleId;
 
-        sale.SaleDate = DateTime.SpecifyKind(sale.SaleDate, DateTimeKind.Utc);
+            _logger.LogInformation("Applying discounts for sale {SaleId}", sale.Id);
+            // Aplicar desconto antes de salvar a venda
+            _discountService.ApplyDiscounts(sale.Items);
 
+            sale.SaleDate = DateTime.SpecifyKind(sale.SaleDate, DateTimeKind.Utc);
 
-        var createdSale = await _saleRepository.CreateAsync(sale, cancellationToken);
+            var createdSale = await _saleRepository.CreateAsync(sale, cancellationToken);
+            _logger.LogInformation("Sale created successfully with ID {SaleId}", createdSale.Id);
 
-        // Publicando evento no Rebus após salvar a venda.
-        await _messageBusService.PublishEvent(new OrderCreatedEvent(createdSale.SaleNumber, createdSale.Customer, createdSale.TotalAmount));
+            // Publicando evento no Rebus após salvar a venda.
+            await _messageBusService.PublishEvent(new OrderCreatedEvent(createdSale.SaleNumber, createdSale.Customer, createdSale.TotalAmount));
+            _logger.LogInformation("Order created event published for sale {SaleId}", createdSale.Id);
 
-        var result = _mapper.Map<CreateSaleResult>(createdSale);
+            var result = _mapper.Map<CreateSaleResult>(createdSale);
 
-        return result;
+            return result;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error creating sale for command {@Command}", command);
+            throw;
+        }
     }
 }

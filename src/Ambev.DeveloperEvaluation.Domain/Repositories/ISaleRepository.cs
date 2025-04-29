@@ -17,4 +17,5 @@ public interface ISaleRepository
 
     Task<int> CountAsync();
     Task<List<Sale>> GetPagedAsync(int page, int pageSize);
+     Task<int> GetLastIdAsync(CancellationToken cancellationToken);
 }

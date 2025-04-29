@@ -1,9 +1,6 @@
 using Ambev.DeveloperEvaluation.Domain.Repositories;
 using AutoMapper;
 using MediatR;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using Ambev.DeveloperEvaluation.Application.Sales.GetSale;
 
 namespace Ambev.DeveloperEvaluation.Application.Sales.GetSales

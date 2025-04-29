@@ -8,10 +8,12 @@ public class CreateProductCommandValidator : AbstractValidator<CreateProductComm
 {
     public CreateProductCommandValidator()
     {
-        // RuleFor(Product => Product.Id);//.SetValidator(new EmailValidator());
-        // RuleFor(Product => Product.Name).NotEmpty().Length(3, 50);
-        // RuleFor(Product => Product.Description);//.SetValidator(new PasswordValidator());
-        // RuleFor(Product => Product.UnitPrice);//.Matches(@"^\+?[1-9]\d{1,14}$");
-        // RuleFor(Product => Product.IsAvailable);//.NotEqual(ProductStatus.Unknown);
+        RuleFor(x => x.Name)
+                   .NotEmpty()
+                   .WithMessage("Name is required");
+
+        RuleFor(x => x.UnitPrice)
+            .GreaterThan(0)
+            .WithMessage("Price must be greater than zero");
     }
 }
