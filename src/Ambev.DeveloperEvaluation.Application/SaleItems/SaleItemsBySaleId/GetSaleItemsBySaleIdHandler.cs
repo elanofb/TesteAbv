@@ -17,7 +17,6 @@ public class GetSaleItemsBySaleIdHandler : IRequestHandler<GetSaleItemsBySaleIdC
     public async Task<List<GetSaleItemsBySaleIdResult>> Handle(GetSaleItemsBySaleIdCommand request, CancellationToken cancellationToken)
     {
         var saleItems = await _repo.GetBySaleIdAsync(request.SaleId);
-        //var saleItems2 = await _repo.GetBySaleIdWithProductAsync(request.SaleId);
         return _mapper.Map<List<GetSaleItemsBySaleIdResult>>(saleItems);
     }
 }

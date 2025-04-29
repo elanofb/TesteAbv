@@ -15,8 +15,5 @@ public class DeleteSaleItemValidator : AbstractValidator<DeleteSaleItemCommand>
         RuleFor(x => x.Id)
             .GreaterThan(0)
             .WithMessage("Id must be greater than zero.");
-        //RuleFor(x => x.Id)
-        //    .NotEmpty()
-        //    .WithMessage("SaleItem ID is required");
     }
 }

@@ -56,4 +56,14 @@ public class SaleItemRepository : ISaleItemRepository
             .Where(si => si.SaleId == saleId)
             .ToListAsync();
     }
+
+    public async Task<int> GetLastIdAsync(CancellationToken cancellationToken)
+    {
+        var lastId = await _context.SaleItems
+            .OrderByDescending(s => s.Id)
+            .Select(s => s.Id)
+            .FirstOrDefaultAsync(cancellationToken);
+
+        return lastId;
+    }
 }

@@ -44,7 +44,7 @@ public class DeleteSaleHandler : IRequestHandler<DeleteSaleCommand, DeleteSaleRe
         if (!success)
             throw new KeyNotFoundException($"Sale with ID {request.Id} not found");
 
-        // Publicando evento no Rebus após cancelar item da venda.
+        // Publicando evento no Rebus apÃ³s cancelar item da venda.
         await _messageBusService.PublishEvent(new OrderCanceledEvent(request.Id.ToString()));
 
         return new DeleteSaleResponse { Success = true };
