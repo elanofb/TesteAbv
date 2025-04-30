@@ -15,7 +15,6 @@ public class CreateSaleRequest
         public string Customer { get; set; }
         public decimal TotalAmount { get; set; }
         public string Branch { get; set; }
-        //public List<SaleItem> Items { get; set; } = new();
         public List<CreateSaleItemRequest> Items { get; set; } = new();
     
 }

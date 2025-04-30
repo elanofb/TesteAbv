@@ -7,7 +7,6 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Products.GetProducts
     {
         public GetProductsProfile()
         {
-            //CreateMap<GetProductsCommand, GetProductsRequest>();
             CreateMap<GetProductsRequest, GetProductsCommand>();
             CreateMap<GetProductsResult, GetProductsResponse>();
         }

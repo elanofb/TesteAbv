@@ -17,12 +17,6 @@ public class CreateSaleItemHandler : IRequestHandler<CreateSaleItemCommand, Crea
     private readonly IMapper _mapper;
     private readonly IPasswordHasher _passwordHasher;
 
-    /// <summary>
-    /// Initializes a new instance of CreateSaleItemHandler
-    /// </summary>
-    /// <param name="saleitemRepository">The saleitem repository</param>
-    /// <param name="mapper">The AutoMapper instance</param>
-    /// <param name="validator">The validator for CreateSaleItemCommand</param>
     public CreateSaleItemHandler(ISaleItemRepository saleitemRepository, ISaleRepository saleRepository, IMapper mapper)
     {
         _saleitemRepository = saleitemRepository;
@@ -30,12 +24,6 @@ public class CreateSaleItemHandler : IRequestHandler<CreateSaleItemCommand, Crea
         _mapper = mapper;
     }
 
-    /// <summary>
-    /// Handles the CreateSaleItemCommand request
-    /// </summary>
-    /// <param name="command">The CreateSaleItem command</param>
-    /// <param name="cancellationToken">Cancellation token</param>
-    /// <returns>The created saleitem details</returns>
     public async Task<CreateSaleItemResult> Handle(CreateSaleItemCommand command, CancellationToken cancellationToken)
     {
         var validator = new CreateSaleItemCommandValidator();

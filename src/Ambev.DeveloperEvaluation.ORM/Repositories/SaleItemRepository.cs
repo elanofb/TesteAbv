@@ -32,7 +32,6 @@ public class SaleItemRepository : ISaleItemRepository
         return await _context.SaleItems.FirstOrDefaultAsync(o=> o.Id == id, cancellationToken);
     }
 
-    //Task<SaleItem?> GetBySaleIdAsync(int saleid, CancellationToken cancellationToken = default);
     public async Task<List<SaleItem?>> GetBySaleIdAsync(int saleid, CancellationToken cancellationToken = default)
     {
         return await _context.SaleItems.Where(o => o.SaleId == saleid).ToListAsync(cancellationToken);

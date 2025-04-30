@@ -24,7 +24,7 @@ namespace Ambev.DeveloperEvaluation.ORM.Repositories
         {
             return await _context.Carts
                 .Include(c => c.Products)
-                .OrderBy(c => c.Id) // melhorar com parâmetro "order"
+                .OrderBy(c => c.Id) 
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();

@@ -53,8 +53,6 @@ public class Program
 
             builder.RegisterDependencies();
 
-            // builder.Services.AddAutoMapper(typeof(GetProductProfile));
-            // builder.Services.AddAutoMapper(typeof(GetSaleProfile));
             builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             builder.Services.AddAutoMapper(typeof(Program).Assembly, typeof(ApplicationLayer).Assembly);
 
@@ -86,7 +84,6 @@ public class Program
             {
                 options.AddPolicy("AllowAngularApp",
                     policy => policy.WithOrigins("http://localhost:4200")
-                                    //.AllowAnyOrigin()
                                     .AllowAnyMethod()
                                     .AllowAnyHeader());
             });
@@ -100,7 +97,6 @@ public class Program
                 app.UseSwaggerUI();
             }
 
-            //app.UseHttpsRedirection();
             app.UseCors("AllowAngularApp");
             app.UseAuthentication();
             app.UseAuthorization();

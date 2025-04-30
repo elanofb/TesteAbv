@@ -75,7 +75,6 @@ public class ProductsController : BaseController
     }
 
     [HttpGet]
-    //[ProducesResponseType(typeof(ApiResponseWithData<List<GetProductsResult>>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponseWithData<GetProductsResult>), StatusCodes.Status200OK)]
     public async Task<IActionResult> Get(CancellationToken ct)
     {
@@ -87,21 +86,6 @@ public class ProductsController : BaseController
             Data = result
         });
     }
-
-    //[HttpGet]
-    ////[ProducesResponseType(typeof(ApiResponseWithData<List<GetProductsResponse>>), StatusCodes.Status200OK)]
-    //public async Task<IActionResult> Get1(CancellationToken cancellationToken)
-    //{
-    //    var command = _mapper.Map<GetProductsCommand>(request);
-    //    var response = await _mediator.Send(command, cancellationToken);
-
-    //    return Ok(new ApiResponseWithData<GetProductResponse>
-    //    {
-    //        Success = true,
-    //        Message = "Products retrieved successfully",
-    //        Data = _mapper.Map<GetProductsResponse>(response)
-    //    });
-    //}
 
     [HttpDelete("{id}")]
     [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status200OK)]

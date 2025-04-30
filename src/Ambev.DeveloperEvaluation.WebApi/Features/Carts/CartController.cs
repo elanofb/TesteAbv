@@ -1,4 +1,3 @@
-// File: WebApi/Features/Carts/CartController.cs
 using Ambev.DeveloperEvaluation.WebApi.Features.Carts.CreateCart;
 using Ambev.DeveloperEvaluation.WebApi.Features.Carts.GetCart;
 using Ambev.DeveloperEvaluation.WebApi.Features.Carts.GetCarts;
@@ -38,25 +37,15 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Carts
         [ProducesResponseType(typeof(ApiResponseWithData<CreateCartResponse>), StatusCodes.Status201Created)]
         public async Task<IActionResult> Create([FromBody] CreateCartRequest request, CancellationToken ct)
         {
-            //var result = (CreateCartResponse)await _mediator.Send(request, ct);
-            //var command = _mapper.Map<CreateCartCommand>(request);
-            //var result = await _mediator.Send(command);
-
-            //return Created($"api/cart/{result.Id}", new ApiResponseWithData<CreateCartResponse>
-            //{
-            //    Success = true,
-            //    Message = "Cart created",
-            //    Data = result
-            //});
-            /////////////
+          
             var validator = new CreateCartRequestValidator();
-            var validationResult = await validator.ValidateAsync(request);//, cancellationToken);
+            var validationResult = await validator.ValidateAsync(request);
 
             if (!validationResult.IsValid)
                 return BadRequest(validationResult.Errors);
 
             var command = _mapper.Map<CreateCartCommand>(request);
-            var response = await _mediator.Send(command);//, cancellationToken);
+            var response = await _mediator.Send(command);
 
             return Created(string.Empty, new ApiResponseWithData<CreateCartResponse>
             {
@@ -87,7 +76,6 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Carts
             {
                 Success = true,
                 Message = "Cart found",
-                //Data = (GetCartResponse)result
                 Data = _mapper.Map<GetCartResponse>(result)
             });
 
@@ -97,24 +85,6 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Carts
         [ProducesResponseType(typeof(ApiResponseWithData<PaginatedResponse<GetCartsResponse>>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAll([FromQuery] GetCartsRequest request, CancellationToken ct)
         {
-            //var result = await _mediator.Send(request, ct);
-
-            //return Ok(new ApiResponseWithData<PaginatedResponse<GetCartsResponse>>
-            //{
-            //    Success = true,
-            //    Message = "Carts retrieved",
-            //    Data = (PaginatedResponse<GetCartsResponse>)result
-            //});
-
-            //var result = await _mediator.Send(request, ct);
-
-            //return Ok(new ApiResponseWithData<GetCartsResponse>
-            //{
-            //    Success = true,
-            //    Message = "Carts retrieved",
-            //    Data = result
-            //});
-
             var command = _mapper.Map<GetCartsCommand>(request);
             var response = await _mediator.Send(command);
 

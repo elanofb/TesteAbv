@@ -5,7 +5,6 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.SaleItems.CreateSaleItems;
 public class CreateSaleItemResponse
 {
     public int Id { get; set; }    
-    //public string SaleNumber { get; set; }
     public int SaleId { get; set; }
     public int ProductId { get; set; }
     public int Quantity { get; set; }

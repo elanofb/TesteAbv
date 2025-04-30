@@ -13,8 +13,6 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
 
         builder.HasKey(u => u.Id);
 
-        //NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(builder.Property<int>("Id"));
-
         builder.Property(u => u.Id).IsRequired();
         builder.Property(u => u.Description).IsRequired().HasMaxLength(100);
         builder.Property(u => u.Name).IsRequired();

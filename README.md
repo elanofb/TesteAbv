@@ -30,7 +30,7 @@ https://github.com/user-attachments/assets/fc9686a7-d20d-434c-a40e-8ae9fc3c3f62
 
 ## Estrutura do Projeto
 ```
-TesteMouts/
+TesteAbv/
 │── src/
 │   ├── Ambev.DeveloperEvaluation.Application/  # Camada de aplicação (CQRS, Handlers)
 │   ├── Ambev.DeveloperEvaluation.Common/       # Utilitários e serviços compartilhados
@@ -50,8 +50,8 @@ TesteMouts/
 
 ### Clonando o Repositório
 ```bash
-git clone https://github.com/elanofb/TesteMouts.git
-cd TesteMouts
+git clone https://github.com/elanofb/TesteAbv.git
+cd TesteAbv
 ```
 
 ### Configurando o Banco de Dados (PostgreSQL via Docker)
@@ -120,7 +120,7 @@ docker run -d --name rabbitmq -p 5672:5672 -p 15672:15672 rabbitmq:3-management
 ### Registrar Rebus no Program.cs
 ```csharp
 builder.Services.AddRebus(configure => configure
-    .Transport(t => t.UseRabbitMq("amqp://guest:guest@localhost", "sales_queue_mouts"))
+    .Transport(t => t.UseRabbitMq("amqp://guest:guest@localhost", "sales_queue_abv"))
     .Logging(l => l.Console()));
 ```
 
@@ -136,8 +136,8 @@ using (var scope = app.Services.CreateScope())
 
 ### Criar e Publicar a Imagem Docker
 ```bash
-docker build -t moutsambevelano-api .
-docker run -p 5000:80 moutsambevelano-api
+docker build -t ambevelano-api .
+docker run -p 5000:80 ambevelano-api
 ```
 
 ### CI/CD com GitHub Actions (Exemplo `ci.yml`)
@@ -167,7 +167,7 @@ jobs:
 
 Execute o seguinte comando para rodar o projeto:
 ```bash
-dotnet run --project MoutsElanoApi
+dotnet run --project Ambev.DeveloperEvaluation.WebApi
 ```
 
 ---
@@ -279,7 +279,7 @@ dotnet add Ambev.DeveloperEvaluation.Infrastructure package Microsoft.EntityFram
 ```
 Atualizar banco de dados:
 ```bash
-dotnet ef database update --project Ambev.DeveloperEvaluation.Infrastructure --startup-project MoutsElanoApi
+dotnet ef database update --project Ambev.DeveloperEvaluation.Infrastructure --startup-project Ambev.DeveloperEvaluation.WebApi
 ```
 
 ### Application
@@ -480,7 +480,7 @@ docker exec -it rabbitmq rabbitmqctl list_queues
 ```
 
 ## Conclusão
-Este documento cobre todo o processo desde a instalação, configuração, execução, testes e deploy do projeto TesteMouts. Se houver dúvidas, consulte os arquivos-fonte ou documentações adicionais.
+Este documento cobre todo o processo desde a instalação, configuração, execução, testes e deploy do projeto TesteAbv. Se houver dúvidas, consulte os arquivos-fonte ou documentações adicionais.
 
 Contato: elanofb@gmail.com 
 +55 (85) 98195.1011

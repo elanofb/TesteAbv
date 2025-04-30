@@ -75,8 +75,6 @@ public class CreateSaleHandlerTests
     [Fact(DisplayName = "Given valid sale data When creating sale Then returns success response")]
     public async Task Handle_ValidRequest_ReturnsSuccessResponse()
     {
-        //// Given
-        //var command = new CreateSaleCommand(); // Empty command will fail validation
         // Given
         var nextSaleId = await GetNextSaleIdAsync();
         var nextSaleItemId = await GetNextSaleItemIdAsync();
@@ -121,10 +119,10 @@ public class CreateSaleHandlerTests
         _saleRepository.CreateAsync(Arg.Any<Sale>(), Arg.Any<CancellationToken>())
             .Returns(sale);
 
-        //// When
+        // When
         var createSaleResult = await _handler.Handle(command, CancellationToken.None);
 
-        //// Then
+        // Then
         createSaleResult.Should().NotBeNull();
         await _saleRepository.Received(1).CreateAsync(Arg.Any<Sale>(), Arg.Any<CancellationToken>());
     }

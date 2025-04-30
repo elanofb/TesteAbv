@@ -9,7 +9,6 @@ public interface ISaleItemRepository
 {
     Task<SaleItem> CreateAsync(SaleItem saleitem, CancellationToken cancellationToken = default);
     Task<SaleItem?> GetByIdAsync(int id, CancellationToken cancellationToken = default);
-    //Task<SaleItem?> GetBySaleIdAsync(int saleid, CancellationToken cancellationToken = default);
     Task<List<SaleItem?>> GetBySaleIdAsync(int saleid, CancellationToken cancellationToken = default);
     Task<List<SaleItem>> GetBySaleIdWithProductAsync(int saleId);
     Task<bool> DeleteAsync(int id, CancellationToken cancellationToken = default);

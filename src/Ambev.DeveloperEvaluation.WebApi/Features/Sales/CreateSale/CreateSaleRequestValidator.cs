@@ -9,25 +9,26 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Sales.CreateSale;
 /// </summary>
 public class CreateSaleRequestValidator : AbstractValidator<CreateSaleRequest>
 {
-    /// <summary>
-    /// Initializes a new instance of the CreateSaleRequestValidator with defined validation rules.
-    /// </summary>
-    /// <remarks>
-    /// Validation rules include:
-    /// - Email: Must be valid format (using EmailValidator)
-    /// - Salename: Required, length between 3 and 50 characters
-    /// - Password: Must meet security requirements (using PasswordValidator)
-    /// - Phone: Must match international format (+X XXXXXXXXXX)
-    /// - Status: Cannot be Unknown
-    /// - Role: Cannot be None
-    /// </remarks>
     public CreateSaleRequestValidator()
     {
-        // RuleFor(sale => sale.Email).SetValidator(new EmailValidator());
-        // RuleFor(sale => sale.Salename).NotEmpty().Length(3, 50);
-        // RuleFor(sale => sale.Password).SetValidator(new PasswordValidator());
-        // RuleFor(sale => sale.Phone).Matches(@"^\+?[1-9]\d{1,14}$");
-        // // RuleFor(sale => sale.Status).NotEqual(SaleStatus.Unknown);
-        // // RuleFor(sale => sale.Role).NotEqual(SaleRole.None);
+        RuleFor(x => x.SaleNumber)
+            .NotEmpty()
+            .WithMessage("Sale number is required.");
+
+        RuleFor(x => x.SaleDate)
+            .NotEmpty()
+            .WithMessage("Sale date is required.");
+
+        RuleFor(x => x.Customer)
+            .NotEmpty()
+            .WithMessage("Customer name is required.");
+
+        RuleFor(x => x.TotalAmount)
+            .GreaterThan(0)
+            .WithMessage("Total amount must be greater than zero.");
+
+        RuleFor(x => x.Branch)
+            .NotEmpty()
+            .WithMessage("Branch is required.");
     }
 }

@@ -81,7 +81,6 @@ public static class LoggingExtension
 
     private static void ConfigureProductionLogging(LoggerConfiguration loggerConfiguration, HostBuilderContext context)
     {
-        //var basePath = AppDomain.CurrentDomain.BaseDirectory;
         var basePath = Directory.GetCurrentDirectory();
         var logPath = Path.Combine(basePath, "logs", $"log-{DateTime.UtcNow:yyyy-MM-dd}.txt");
         
