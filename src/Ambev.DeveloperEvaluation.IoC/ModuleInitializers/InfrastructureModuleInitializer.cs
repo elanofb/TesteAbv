@@ -7,6 +7,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Ambev.DeveloperEvaluation.Domain.Services;
 using Ambev.DeveloperEvaluation.Application.Services;
+using Ambev.DeveloperEvaluation.Application.Products.CreateProduct;
+using FluentValidation;
 
 namespace Ambev.DeveloperEvaluation.IoC.ModuleInitializers;
 
@@ -22,5 +24,6 @@ public class InfrastructureModuleInitializer : IModuleInitializer
         builder.Services.AddScoped<IMessageBusService, MessageBusService>();
         builder.Services.AddScoped<SaleDiscountService>();
         builder.Services.AddScoped<ICartRepository, CartRepository>();
+        builder.Services.AddScoped<IValidator<CreateProductCommand>, CreateProductCommandValidator>();
     }
 }
