@@ -32,16 +32,16 @@ https://github.com/user-attachments/assets/fc9686a7-d20d-434c-a40e-8ae9fc3c3f62
 ```
 TesteAbv/
 │── src/
-│   ├── Ambev.DeveloperEvaluation.Application/  # Camada de aplicação (CQRS, Handlers)
-│   ├── Ambev.DeveloperEvaluation.Common/       # Utilitários e serviços compartilhados
-│   ├── Ambev.DeveloperEvaluation.Domain/       # Entidades e regras de negócio
-│   ├── Ambev.DeveloperEvaluation.IoC/          # Configuração de Inversão de Controle
-│   ├── Ambev.DeveloperEvaluation.ORM/          # Camada de persistência
-│   ├── Ambev.DeveloperEvaluation.WebApi/       # API e Controllers
+│   ├── Abv.DevEval.Application/  # Camada de aplicação (CQRS, Handlers)
+│   ├── Abv.DevEval.Common/       # Utilitários e serviços compartilhados
+│   ├── Abv.DevEval.Domain/       # Entidades e regras de negócio
+│   ├── Abv.DevEval.IoC/          # Configuração de Inversão de Controle
+│   ├── Abv.DevEval.ORM/          # Camada de persistência
+│   ├── Abv.DevEval.WebApi/       # API e Controllers
 │── tests/
-│   ├── Ambev.DeveloperEvaluation.Unit/         # Testes unitários
-│   ├── Ambev.DeveloperEvaluation.Integration/  # Testes de integração
-│   ├── Ambev.DeveloperEvaluation.Functional/   # Testes funcionais
+│   ├── Abv.DevEval.Unit/         # Testes unitários
+│   ├── Abv.DevEval.Integration/  # Testes de integração
+│   ├── Abv.DevEval.Functional/   # Testes funcionais
 │── docker-compose.yml  # Configuração do Docker
 │── README.md
 ```
@@ -90,7 +90,7 @@ dotnet ef database update
 
 ### Rodar a Aplicação
 ```bash
-dotnet run --project src/Ambev.DeveloperEvaluation.WebApi
+dotnet run --project src/Abv.DevEval.WebApi
 ```
 
 ### Acessar a API via Swagger
@@ -102,12 +102,12 @@ http://localhost:8171/swagger
 
 ### Executar Testes Unitários
 ```bash
-dotnet test tests/Ambev.DeveloperEvaluation.Unit
+dotnet test tests/Abv.DevEval.Unit
 ```
 
 ### Executar Testes de Integração
 ```bash
-dotnet test tests/Ambev.DeveloperEvaluation.Integration
+dotnet test tests/Abv.DevEval.Integration
 ```
 
 ## Mensageria com Rebus (RabbitMQ)
@@ -136,8 +136,8 @@ using (var scope = app.Services.CreateScope())
 
 ### Criar e Publicar a Imagem Docker
 ```bash
-docker build -t ambevelano-api .
-docker run -p 5000:80 ambevelano-api
+docker build -t abvelano-api .
+docker run -p 5000:80 abvelano-api
 ```
 
 ### CI/CD com GitHub Actions (Exemplo `ci.yml`)
@@ -167,7 +167,7 @@ jobs:
 
 Execute o seguinte comando para rodar o projeto:
 ```bash
-dotnet run --project Ambev.DeveloperEvaluation.WebApi
+dotnet run --project Abv.DevEval.WebApi
 ```
 
 ---
@@ -177,19 +177,19 @@ dotnet run --project Ambev.DeveloperEvaluation.WebApi
 ### Criando a Estrutura
 1. Criar bibliotecas e domínios do projeto:
     ```bash
-    dotnet new classlib -n Ambev.DeveloperEvaluation.Domain
+    dotnet new classlib -n Abv.DevEval.Domain
     ```
 2. Adicionar uma nova classe de migração EF:
     ```bash
-    dotnet ef migrations add InitialCreate --project Ambev.DeveloperEvaluation.Infrastructure --startup-project Ambev.DeveloperEvaluation.API
+    dotnet ef migrations add InitialCreate --project Abv.DevEval.Infrastructure --startup-project Abv.DevEval.API
     ```
 3. Listar as migrações:
     ```bash
-    dotnet ef migrations list --project Ambev.DeveloperEvaluation.Infrastructure --startup-project Ambev.DeveloperEvaluation.API
+    dotnet ef migrations list --project Abv.DevEval.Infrastructure --startup-project Abv.DevEval.API
     ```
 4. Atualizar o banco de dados:
     ```bash
-    dotnet ef database update --project Ambev.DeveloperEvaluation.Infrastructure --startup-project Ambev.DeveloperEvaluation.API
+    dotnet ef database update --project Abv.DevEval.Infrastructure --startup-project Abv.DevEval.API
     ```
 
 ---
@@ -199,24 +199,24 @@ dotnet run --project Ambev.DeveloperEvaluation.WebApi
 ### Projetos de Teste
 1. Criar projetos de testes:
     ```bash
-    dotnet new xunit --name Ambev.DeveloperEvaluation.UnitTests
-    dotnet new xunit --name Ambev.DeveloperEvaluation.IntegrationTests
+    dotnet new xunit --name Abv.DevEval.UnitTests
+    dotnet new xunit --name Abv.DevEval.IntegrationTests
     ```
 2. Adicionar os projetos de teste à solução:
     ```bash
-    dotnet sln add Ambev.DeveloperEvaluation.UnitTests/Ambev.DeveloperEvaluation.UnitTests.csproj
-    dotnet sln add Ambev.DeveloperEvaluation.IntegrationTests/Ambev.DeveloperEvaluation.IntegrationTests.csproj
+    dotnet sln add Abv.DevEval.UnitTests/Abv.DevEval.UnitTests.csproj
+    dotnet sln add Abv.DevEval.IntegrationTests/Abv.DevEval.IntegrationTests.csproj
     ```
 3. Referenciar bibliotecas nos testes:
     - UnitTests:
         ```bash
-        dotnet add Ambev.DeveloperEvaluation.UnitTests reference Ambev.DeveloperEvaluation.Application
-        dotnet add Ambev.DeveloperEvaluation.UnitTests reference Ambev.DeveloperEvaluation.Domain
+        dotnet add Abv.DevEval.UnitTests reference Abv.DevEval.Application
+        dotnet add Abv.DevEval.UnitTests reference Abv.DevEval.Domain
         ```
     - IntegrationTests:
         ```bash
-        dotnet add Ambev.DeveloperEvaluation.IntegrationTests reference Ambev.DeveloperEvaluation.API
-        dotnet add Ambev.DeveloperEvaluation.IntegrationTests reference Ambev.DeveloperEvaluation.Infrastructure
+        dotnet add Abv.DevEval.IntegrationTests reference Abv.DevEval.API
+        dotnet add Abv.DevEval.IntegrationTests reference Abv.DevEval.Infrastructure
         ```
 
 ---
@@ -225,15 +225,15 @@ dotnet run --project Ambev.DeveloperEvaluation.WebApi
 
 Adicionar dependências para suporte ao RabbitMQ:
 ```bash
-dotnet add Ambev.DeveloperEvaluation.Infrastructure package RabbitMQ.Client
+dotnet add Abv.DevEval.Infrastructure package RabbitMQ.Client
 ```
 Para uma versão específica:
 ```bash
-dotnet add Ambev.DeveloperEvaluation.Infrastructure package RabbitMQ.Client --version 6.5.0
+dotnet add Abv.DevEval.Infrastructure package RabbitMQ.Client --version 6.5.0
 ```
 Outros pacotes necessários:
 ```bash
-dotnet add Ambev.DeveloperEvaluation.Infrastructure package Microsoft.Extensions.Hosting
+dotnet add Abv.DevEval.Infrastructure package Microsoft.Extensions.Hosting
 ```
 Segue uma evidência da criação das Queues no Rabbit
 
@@ -246,20 +246,20 @@ Segue uma evidência da criação das Queues no Rabbit
 
 Adicionar dependências e referências para o projeto API:
 ```bash
-dotnet add Ambev.DeveloperEvaluation.API reference Ambev.DeveloperEvaluation.Domain
+dotnet add Abv.DevEval.API reference Abv.DevEval.Domain
 ```
 ```bash
-dotnet add Ambev.DeveloperEvaluation.API reference Ambev.DeveloperEvaluation.Application
+dotnet add Abv.DevEval.API reference Abv.DevEval.Application
 ```
 ```bash
-dotnet add Ambev.DeveloperEvaluation.API reference Ambev.DeveloperEvaluation.CrossCutting
+dotnet add Abv.DevEval.API reference Abv.DevEval.CrossCutting
 ```
 ```bash
-dotnet add Ambev.DeveloperEvaluation.API reference Ambev.DeveloperEvaluation.Infra
+dotnet add Abv.DevEval.API reference Abv.DevEval.Infra
 ```
 Dependências:
 ```bash
-dotnet add Ambev.DeveloperEvaluation.API package Microsoft.AspNetCore.Mvc
+dotnet add Abv.DevEval.API package Microsoft.AspNetCore.Mvc
 ```
 ```bash
 dotnet add package Microsoft.EntityFrameworkCore.Design
@@ -269,41 +269,41 @@ dotnet add package Microsoft.EntityFrameworkCore.Design
 
 Adicionar pacotes e referências para infraestrutura:
 ```bash
-dotnet add Ambev.DeveloperEvaluation.Infrastructure reference Ambev.DeveloperEvaluation.Domain
+dotnet add Abv.DevEval.Infrastructure reference Abv.DevEval.Domain
 ```
 ```bash
-dotnet add Ambev.DeveloperEvaluation.Infrastructure package Microsoft.EntityFrameworkCore
+dotnet add Abv.DevEval.Infrastructure package Microsoft.EntityFrameworkCore
 ```
 ```bash
-dotnet add Ambev.DeveloperEvaluation.Infrastructure package Microsoft.EntityFrameworkCore.SqlServer
+dotnet add Abv.DevEval.Infrastructure package Microsoft.EntityFrameworkCore.SqlServer
 ```
 Atualizar banco de dados:
 ```bash
-dotnet ef database update --project Ambev.DeveloperEvaluation.Infrastructure --startup-project Ambev.DeveloperEvaluation.WebApi
+dotnet ef database update --project Abv.DevEval.Infrastructure --startup-project Abv.DevEval.WebApi
 ```
 
 ### Application
 
 Adicionar referência ao domínio:
 ```bash
-dotnet add Ambev.DeveloperEvaluation.Application reference Ambev.DeveloperEvaluation.Domain
+dotnet add Abv.DevEval.Application reference Abv.DevEval.Domain
 ```
 
 ### CrossCutting
 
 Adicionar referências e pacotes:
 ```bash
-dotnet add Ambev.DeveloperEvaluation.CrossCutting reference Ambev.DeveloperEvaluation.Application
+dotnet add Abv.DevEval.CrossCutting reference Abv.DevEval.Application
 ```
 Pacotes Serilog:
 ```bash
-dotnet add Ambev.DeveloperEvaluation.CrossCutting package Serilog
+dotnet add Abv.DevEval.CrossCutting package Serilog
 ```
 ```bash
-dotnet add Ambev.DeveloperEvaluation.CrossCutting package Serilog.Extensions.Logging
+dotnet add Abv.DevEval.CrossCutting package Serilog.Extensions.Logging
 ```
 ```bash
-dotnet add Ambev.DeveloperEvaluation.CrossCutting package Serilog.Sinks.Console
+dotnet add Abv.DevEval.CrossCutting package Serilog.Sinks.Console
 ```
 ```bash
 dotnet add package Serilog.Sinks.File
@@ -315,13 +315,13 @@ dotnet add package Serilog.Sinks.File
 
 Adicionar pacotes úteis para testes unitários:
 ```bash
-dotnet add Ambev.DeveloperEvaluation.UnitTests package FluentAssertions
+dotnet add Abv.DevEval.UnitTests package FluentAssertions
 ```
 ```bash
-dotnet add Ambev.DeveloperEvaluation.UnitTests package Bogus
+dotnet add Abv.DevEval.UnitTests package Bogus
 ```
 ```bash
-dotnet add Ambev.DeveloperEvaluation.UnitTests package NSubstitute
+dotnet add Abv.DevEval.UnitTests package NSubstitute
 ```
 Outros pacotes comuns:
 ```bash
@@ -338,19 +338,19 @@ dotnet add package xunit.runner.visualstudio
 
 Adicionar pacotes úteis para testes de integração:
 ```bash
-dotnet add Ambev.DeveloperEvaluation.IntegrationTests package Testcontainers
+dotnet add Abv.DevEval.IntegrationTests package Testcontainers
 ```
 ```bash
-dotnet add Ambev.DeveloperEvaluation.IntegrationTests package FluentAssertions
+dotnet add Abv.DevEval.IntegrationTests package FluentAssertions
 ```
 ```bash
-dotnet add Ambev.DeveloperEvaluation.IntegrationTests package Microsoft.AspNetCore.Mvc.Testing
+dotnet add Abv.DevEval.IntegrationTests package Microsoft.AspNetCore.Mvc.Testing
 ```
 ```bash
-dotnet add Ambev.DeveloperEvaluation.IntegrationTests package Microsoft.EntityFrameworkCore
+dotnet add Abv.DevEval.IntegrationTests package Microsoft.EntityFrameworkCore
 ```
 ```bash
-dotnet add Ambev.DeveloperEvaluation.IntegrationTests package Microsoft.EntityFrameworkCore.InMemory
+dotnet add Abv.DevEval.IntegrationTests package Microsoft.EntityFrameworkCore.InMemory
 ```
 
 Testcontainers específicos:
